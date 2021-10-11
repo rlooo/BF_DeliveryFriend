@@ -18,3 +18,5 @@ class Information(models.Model):
 class Account(models.Model):
     social_login_id = models.IntegerField(blank=True)
     email = models.CharField(max_length=60, null=True)
+    nickname = models.CharField(max_length=20)
+    profile_image = models.CharField(max_length=2000)
