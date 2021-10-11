@@ -77,23 +77,19 @@ class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 �
         }
         kakao_response=requests.post(url, headers=headers)
         kakao_response = json.loads(kakao_response.text) # 유저의 정보를 json화해서 변수에 저장
-        print(kakao_response)
-
 
     # 관리자가(employee) 기존에 카카오톡 계정이 DB에 저장되어 있는지 확인
         if Account.objects.filter(social_login_id=kakao_response['id']).exists():  # 지금 접속한 카카오 아이디가 데이터베이스에 존재하는지 확인
             user_info = Account.objects.get(social_login_id=kakao_response['id'])  # 존재하는 카카오 아이디를 가진 유저 객체를 가져옴
             encoded_jwt = jwt.encode({'id': user_info.id}, SECRET_KEY, algorithm='HS256')  # jwt토큰 발행
+            return JsonResponse({
+                'token': encoded_jwt.decode('URF-8')
+            }, status=200)
 
-            return HttpResponse(f'id:{user_info.id}, token:{encoded_jwt}, exist:true')
-
-    # 저장되어 있지 않다면 DB에 저장
+    # 저장되어 있지 않다면 코드 400 리턴
         else:
-            Account(
-                social_login_id=kakao_response['id'],
-                email=kakao_response['kakao_account'].get('email', None)  # 이메일 선택동의여서 없을 수도 있음
-            ).save()
             user_info = Account.objects.get(social_login_id=kakao_response['id'])
             encoded_jwt = jwt.encode({'id': user_info.id}, SECRET_KEY, algorithm='HS256')  # jwt토큰 발행
-
-            return HttpResponse(f'id:{user_info.id}, token:{encoded_jwt}, exist:false')
+            return JsonResponse({
+                'token' : encoded_jwt.decode('URF-8')
+            },status = 400)
