@@ -24,5 +24,5 @@ urlpatterns = [
     path('information/', views.information_list),
     path('information/<int:pk>/', views.information),
     path('auth/login/', views.login),
-    path('auth/kakao/login/', KakaoSignInCallbackView.as_view()),
+    path('auth/kakao/login/', views.KakaoSignInCallbackView.as_view()),
 ]

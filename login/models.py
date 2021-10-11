@@ -16,5 +16,5 @@ class Information(models.Model):
         ordering = ['createAt']
 
 class Account(models.Model):
-    social_login_id = models.CharField(max_length=50, blank=True)
-    email = models.CharField(max_length=60)
+    social_login_id = models.IntegerField(blank=True)
+    email = models.CharField(max_length=60, null=True)
