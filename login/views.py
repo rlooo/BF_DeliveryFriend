@@ -82,14 +82,8 @@ class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 �
         if Account.objects.filter(social_login_id=kakao_response['id']).exists():  # 지금 접속한 카카오 아이디가 데이터베이스에 존재하는지 확인
             user_info = Account.objects.get(social_login_id=kakao_response['id'])  # 존재하는 카카오 아이디를 가진 유저 객체를 가져옴
             encoded_jwt = jwt.encode({'id': user_info.id}, SECRET_KEY, algorithm='HS256')  # jwt토큰 발행
-            return JsonResponse({
-                'token': encoded_jwt.decode('URF-8')
-            }, status=200)
+            return HttpResponse(f'id:{user_info.id}, token:{encoded_jwt}, exist:true')
 
     # 저장되어 있지 않다면 코드 400 리턴
         else:
-            user_info = Account.objects.get(social_login_id=kakao_response['id'])
-            encoded_jwt = jwt.encode({'id': user_info.id}, SECRET_KEY, algorithm='HS256')  # jwt토큰 발행
-            return JsonResponse({
-                'token' : encoded_jwt.decode('URF-8')
-            },status = 400)
+            return HttpResponse(status=400)
