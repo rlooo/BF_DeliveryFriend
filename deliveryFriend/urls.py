@@ -21,8 +21,9 @@ from login.views import KakaoSignInCallbackView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('information/', views.information_list),
-    path('information/<int:pk>/', views.information),
-    path('auth/login/', views.login),
+    path('information/', views.information_list), # 기본 로그인 연습
+    path('information/<int:pk>/', views.information), # 기본 로그인 연습
+    path('auth/login/', views.login), # 기본 로그인 연습
     path('auth/kakao/login/', views.KakaoSignInCallbackView.as_view()),
+    path('categoryCreate/', views.categoryCreate, name = 'categoryCreate'),
 ]
