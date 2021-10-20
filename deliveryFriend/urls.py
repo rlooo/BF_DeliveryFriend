@@ -25,5 +25,6 @@ urlpatterns = [
     path('information/<int:pk>/', views.information), # 기본 로그인 연습
     path('auth/login/', views.login), # 기본 로그인 연습
     path('auth/kakao/login/', views.KakaoSignInCallbackView.as_view()),
+    path('signup/', views.SignUpView.as_view()),
     path('categoryCreate/', views.categoryCreate, name = 'categoryCreate'),
 ]

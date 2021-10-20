@@ -15,6 +15,11 @@ class Board(models.Model):
                                   upload_to = '%Y/%m/%d', blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        Board.objects.filter(date__lte=timezone.now())\
+                    .order_by('created_date')
+        return self.title
+
 
 class Category(models.Model):
-    name = models.CharField
+    name = models.CharField(max_length=10),

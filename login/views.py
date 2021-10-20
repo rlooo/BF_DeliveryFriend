@@ -63,7 +63,6 @@ def login(request):
         print(data)
         return HttpResponse(status=201)
 
-
 @method_decorator(csrf_exempt, name='dispatch')
 class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 클래스
     # 백엔드에서는 프론트에서 받은 카카오의 사용자 토큰을 이용해 카카오에 사용자 정보를 요청한다.
@@ -86,4 +85,37 @@ class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 �
 
     # 저장되어 있지 않다면 코드 400 리턴
         else:
-            return HttpResponse(status=400)
+            user_info = Account(
+                social_login_id=kakao_response['id'],
+                email=kakao_response['kakao_account'].get('email',None),
+            )
+            user_info.save()
+            # 일단 받아온 카카오 id와 email 저장, jwt 토큰은 프론트로 리턴해줄 필요가 없나?
+            # 한 회원의 정보로 인식하기 위해서 social_login_id도 함께 리턴
+            return HttpResponse(f'id:{user_info.id}', status=400)
+
+@csrf_exempt
+class SignUpView(View):
+    def post(request):
+        try:
+            data = json.loads(request.body)
+
+            if Account.objects.filter(social_login_id=data['id']).exists():
+                user_info = Account.objects.get(social_login_id=data['id'])
+
+            email=user_info.email
+            user_info.profile_image = data['image']
+            user_info.nickname = data['nickname']
+
+            if Account.objects.filter(nickname=user_info.nickname).exist():
+                return JsonResponse({'message' : 'ALREADY_EXITSTS'}, status=400)
+
+            return JsonResponse({
+                'id': user_info.social_login_id,
+                'email': user_info.email,
+                'nickname':user_info.nickname,
+                'image':user_info.profile_image,
+            }, status=201)
+
+        except KeyError:
+            return JsonResponse({'message' : 'KEY_ERROR'}, status=400)
