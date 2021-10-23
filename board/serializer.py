@@ -6,6 +6,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ('name',)
 
+# 화면에서 보여줄 필드 명시
 class BoardListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board

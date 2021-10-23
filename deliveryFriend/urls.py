@@ -16,8 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from login import views
-from login.views import KakaoSignInCallbackView
-from login.views import SignUpView
+from board.views import BoardListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +26,6 @@ urlpatterns = [
     path('auth/login/', views.login), # 기본 로그인 연습
     path('auth/kakao/login/', views.KakaoSignInCallbackView.as_view()),
     path('signup/', views.SignUpView),
+    path('board/', BoardListView.as_view()),
     #path('categoryCreate/', views.categoryCreate, name = 'categoryCreate'),
 ]
