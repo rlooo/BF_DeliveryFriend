@@ -99,7 +99,7 @@ class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 �
             user_info.save()
             # 일단 받아온 카카오 id와 email 저장, jwt 토큰은 프론트로 리턴해줄 필요가 없나?
             # 한 회원의 정보로 인식하기 위해서 social_login_id도 함께 리턴
-            return HttpResponse(f'id:{user_info.id}', status=400)
+            return JsonResponse({'id': user_info.social_login_id}, status=400)
 
 @csrf_exempt
 class SignUpView(View):
