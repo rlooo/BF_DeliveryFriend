@@ -13,7 +13,7 @@ class CategoryViewSet(APIView):
         serializer = CategorySerializer(queryset, many=True)
         return HttpResponse(serializer.data)
 
-#n
+
 class BoardListView(generics.ListAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardListSerializer
