@@ -81,7 +81,7 @@ class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 �
         if Account.objects.filter(social_login_id=kakao_response['id']).exists():  # 지금 접속한 카카오 아이디가 데이터베이스에 존재하는지 확인
             user_info = Account.objects.get(social_login_id=kakao_response['id'])  # 존재하는 카카오 아이디를 가진 유저 객체를 가져옴
             encoded_jwt = jwt.encode({'id': user_info.id}, SECRET_KEY, algorithm='HS256')  # jwt토큰 발행
-            # return HttpResponse(f'id:{user_info.id}, token:{encoded_jwt}, exist:true')
+
             return JsonResponse({
                 'id': user_info.social_login_id,
                 'email': user_info.email,
@@ -101,21 +101,27 @@ class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 �
             # 한 회원의 정보로 인식하기 위해서 social_login_id도 함께 리턴
             return JsonResponse({'id': user_info.social_login_id}, status=200)
 
-@csrf_exempt
+@method_decorator(csrf_exempt, name='dispatch')
 class SignUpView(View):
-    def post(request):
+    def post(self, request):
         try:
             data = json.loads(request.body)
 
             if Account.objects.filter(social_login_id=data['id']).exists():
                 user_info = Account.objects.get(social_login_id=data['id'])
 
-            email=user_info.email
-            user_info.profile_image = data['image']
             user_info.nickname = data['nickname']
+            user_info.profile_image = data['image']
 
-            if Account.objects.filter(nickname=user_info.nickname).exist():
-                return JsonResponse({'message' : 'ALREADY_EXITSTS'}, status=400)
+            #if Account.objects.filter(nickname=user_info.nickname).exist():
+                #return JsonResponse({'message' : 'ALREADY_EXITSTS'}, status=400)
+
+            Account(
+                social_login_id=user_info.social_login_id,
+                email=user_info.email,
+                nickname=user_info.nickname,
+                profile_image=user_info.profile_image,
+            ).save()
 
             return JsonResponse({
                 'id': user_info.social_login_id,
