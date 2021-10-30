@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'board',
 ]
 
-ASGI_APPLICATION = 'deliveryFriend.routing.application'
+ASGI_APPLICATION = 'deliveryFriend.asgi.application'
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.

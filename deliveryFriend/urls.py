@@ -27,5 +27,6 @@ urlpatterns = [
     path('auth/kakao/login/', KakaoSignInCallbackView.as_view()),
     path('signup/', SignUpView.as_view()),
     path('board/', BoardListView.as_view()),
+    path('chat/', include('chat.urls')),
     #path('categoryCreate/', views.categoryCreate, name = 'categoryCreate'),
 ]
