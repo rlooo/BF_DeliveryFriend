@@ -16,3 +16,5 @@ requests==2.26.0
 six==1.16.0
 sqlparse==0.4.2
 urllib3==1.26.7
+
+channels~=3.0.4
