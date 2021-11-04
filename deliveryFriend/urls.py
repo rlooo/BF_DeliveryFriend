@@ -16,7 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from login.views import KakaoSignInCallbackView, SignUpView
-from board.views import BoardListView
+from board.views import BoardPostingView, BoardListView
+
+# 이미지 업로드
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +30,12 @@ urlpatterns = [
     #path('auth/login/', views.login), # 기본 로그인 연습
     path('auth/kakao/login/', KakaoSignInCallbackView.as_view()),
     path('signup/', SignUpView.as_view()),
-    path('board/', BoardListView.as_view()),
+    path('board/list/', BoardListView.as_view()),
+    path('board/', BoardPostingView.as_view()),
     path('chat/', include('chat.urls')),
+
     #path('categoryCreate/', views.categoryCreate, name = 'categoryCreate'),
 ]
+
+# 이미지 URL 설정
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

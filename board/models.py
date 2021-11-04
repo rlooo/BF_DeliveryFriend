@@ -1,9 +1,10 @@
+from login.models import Account
 from django.db import models
 from django.utils import timezone
 
 # Create your models here.
 class Board(models.Model):
-    author = models.ForeignKey('login.Account', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(Account, on_delete=models.DO_NOTHING, null=True)
     title = models.CharField(max_length=200)
     text = models.TextField()
     date = models.DateTimeField()
