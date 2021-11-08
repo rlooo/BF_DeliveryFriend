@@ -10,7 +10,7 @@ class Board(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=50)
     price = models.IntegerField()
-    category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
+    #category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
     thumbnail = models.ImageField(u'썸네일',
                                   upload_to = '%Y/%m/%d', blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)

@@ -10,9 +10,8 @@ from django.views import View
 
 from login.models import Account
 from .models import Category, Board
-from .serializer import CategorySerializer, BoardListSerializer
+from .serializer import *
 from django.http import HttpResponse, JsonResponse
-# Create your views here.
 
 class CategoryViewSet(APIView):
     def get(self, request, format=None):
@@ -20,27 +19,45 @@ class CategoryViewSet(APIView):
         serializer = CategorySerializer(queryset, many=True)
         return HttpResponse(serializer.data)
 
-@method_decorator(csrf_exempt, name='dispatch')
+# board.html 페이지를 부르는 index 함수
+def index(request):
+    return render(request, 'board/board.html')
+
+# blog.html 페이지를 부르는 blog 함수
+def post_list(request):
+    if request.method == 'GET':
+        # 모든 Board를 가져와 postlist에 저장한다.
+        postlist = Board.objects.all()
+        return HttpResponse(postlist, status=200)
+
+# blog의 게시글(posting)을 부르는 posting 함수
+def posting(request, pk):
+    # 게시글(Post) 중 pk(primary_key)를 이용해 하나의 게시글(post)를 검색
+    post = Board.objects.get(pk=pk)
+    # posting.html 페이지를 열 때, 찾아낸 게시글(post)을 post라는 이름으로 가져옴
+    return HttpResponse({'post':post},status=200)
+
+
 # 새로운 게시글 작성하는 함수
-class BoardPostingView(View):
-    def post(self, request):
-        if request.method == 'POST':
-            form = BoardListSerializer(data=request.POST)
+def new_post(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
 
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.author = request.author
-                post.title = request.title
-                post.date = request.date
-                post.location = request.location
-                post.price = request.price
-                post.category = request.category
-                post.thumbnail = request.thumbnail
-                post.save()
-                return HttpResponse(status=200)
-
-            return HttpResponse(status=400)
-
+        if Account.objects.filter(social_login_id=data['author']).exists():
+            user = Account.objects.get(social_login_id=data['author'])
+        print(user)
+        new_article=Board.objects.create(
+            author=user,
+            title=data['title'],
+            text=data['text'],
+            date=data['date'],
+            location=data['location'],
+            price=data['price'],
+            #category=data['category'],
+            thumbnail=data['thumbnail'],
+        )
+        new_article.save()
+        return HttpResponse(status=200)
 
 # 모든 게시글들을 불러오는 함수
 class BoardListView(generics.ListAPIView):

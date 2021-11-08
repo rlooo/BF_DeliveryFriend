@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Category, Board
+from django.forms import ModelForm
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,4 +11,4 @@ class CategorySerializer(serializers.ModelSerializer):
 class BoardListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
-        fields = ('author', 'title', 'date', 'location', 'price','category', 'thumbnail')
+        fields = ('author', 'title', 'date', 'location', 'price','thumbnail','created_date')

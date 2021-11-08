@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from login.views import KakaoSignInCallbackView, SignUpView
-from board.views import BoardPostingView, BoardListView
+from board.views import *
 
 # 이미지 업로드
 from django.conf.urls.static import static
@@ -31,7 +31,9 @@ urlpatterns = [
     path('auth/kakao/login/', KakaoSignInCallbackView.as_view()),
     path('signup/', SignUpView.as_view()),
     path('board/list/', BoardListView.as_view()),
-    path('board/', BoardPostingView.as_view()),
+    path('',index),
+    path('board/<int:pk>', posting, name="posting"),
+    path('board/new_post/', new_post),
     path('chat/', include('chat.urls')),
 
     #path('categoryCreate/', views.categoryCreate, name = 'categoryCreate'),
