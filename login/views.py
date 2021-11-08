@@ -116,12 +116,12 @@ class SignUpView(View):
             #if Account.objects.filter(nickname=user_info.nickname).exist():
                 #return JsonResponse({'message' : 'ALREADY_EXITSTS'}, status=400)
 
-            Account(
-                social_login_id=user_info.social_login_id,
-                email=user_info.email,
-                nickname=user_info.nickname,
-                profile_image=user_info.profile_image,
-            ).save()
+            # Account(
+            #     social_login_id=user_info.social_login_id,
+            #     email=user_info.email,
+            #     nickname=user_info.nickname,
+            #     profile_image=user_info.profile_image,
+            # ).save()
 
             return JsonResponse({
                 'id': user_info.social_login_id,
