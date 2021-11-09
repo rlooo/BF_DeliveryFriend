@@ -35,8 +35,7 @@ urlpatterns = [
     path('board/<int:pk>', posting, name="posting"),
     path('board/new_post/', new_post),
     path('chat/', include('chat.urls')),
-
-    #path('categoryCreate/', views.categoryCreate, name = 'categoryCreate'),
+    path('category/', CategoryViewSet.as_view(), name="category"),
 ]
 
 # 이미지 URL 설정

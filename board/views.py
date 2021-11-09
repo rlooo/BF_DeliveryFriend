@@ -74,4 +74,4 @@ class BoardListView(generics.ListAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        return HttpResponse(serializer.data, status=200)
+        return JsonResponse({'data':json.dumps(serializer.data, ensure_ascii=False , indent='\t')}, status=200)
