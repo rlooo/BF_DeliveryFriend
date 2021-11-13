@@ -31,7 +31,7 @@ urlpatterns = [
     path('auth/kakao/login/', KakaoSignInCallbackView.as_view()),
     path('signup/', SignUpView.as_view()),
     path('board/list/', BoardListView.as_view()),
-    path('',index),
+    #path('',index),
     path('board/<int:pk>', posting, name="posting"),
     path('board/new_post/', new_post),
     path('chat/', include('chat.urls')),
