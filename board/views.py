@@ -22,7 +22,7 @@ class CategoryViewSet(APIView):
         serializer_class = self.get_serializer_class()
 
         serializer = serializer_class(queryset, many=True)
-        return JsonResponse(serializer.data, status=200)
+        return HttpResponse(serializer.data, status=200)
 
 # # board.html 페이지를 부르는 index 함수
 # def index(request):
@@ -79,4 +79,4 @@ class BoardListView(generics.ListAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        return JsonResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
+        return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
