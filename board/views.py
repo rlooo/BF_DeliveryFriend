@@ -71,6 +71,7 @@ class BoardListView(generics.ListAPIView):
 
         return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
 
+#카테고리 리스트를 불러오는 함수
 class CategoryViewSet(generics.ListAPIView):
     queryset = Category.objects.all()  # 카테고리 모델을 모두 부른다.
     serializer_class = CategorySerializer
@@ -81,3 +82,12 @@ class CategoryViewSet(generics.ListAPIView):
         serializer = serializer_class(queryset, many=True)
 
         return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
+
+# 카테고리 별 게시글 불러오는 함수
+class CategorySearchViewSet(View):
+    def get(self, request, id):
+        queryset = Board.objects.filter(category__id=id)
+        serializer = BoardListSerializer(queryset, many=True)
+        return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
+
+

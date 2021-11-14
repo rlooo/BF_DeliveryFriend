@@ -4,7 +4,7 @@ from .models import Category, Board
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('name',)
+        fields = ('name','id')
 
 # 화면에서 보여줄 필드 명시
 class BoardListSerializer(serializers.ModelSerializer):
