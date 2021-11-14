@@ -32,10 +32,10 @@ urlpatterns = [
     path('signup/', SignUpView.as_view()),
     path('board/list/', BoardListView.as_view()),
     #path('',index),
-    path('board/<int:pk>', posting, name="posting"),
+    #path('board/<int:pk>', posting, name="posting"),
     path('board/new_post/', new_post),
     path('chat/', include('chat.urls')),
-    path('category/', CategoryViewSet.as_view(), name="category"),
+    path('category/', CategoryViewSet.as_view()),
 ]
 
 # 이미지 URL 설정
