@@ -1,19 +1,11 @@
 import json
 
-from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
 from rest_framework import generics
-from rest_framework.views import APIView
 from django.views import View
 
 from login.models import Account
-from .models import Category, Board
 from .serializer import *
-from django.http import HttpResponse, JsonResponse
-
-
+from django.http import HttpResponse
 
 # # board.html 페이지를 부르는 index 함수
 # def index(request):
@@ -41,14 +33,18 @@ def new_post(request):
         if Account.objects.filter(social_login_id=data['author']).exists():
             user = Account.objects.get(social_login_id=data['author'])
         print(user)
-        new_article=Board.objects.create(
+
+        if Category.objects.filter(id=data['category']).exists():
+            category_obj = Category.objects.get(id=data['category'])
+
+        new_article = Board.objects.create(
             author=user,
             title=data['title'],
             text=data['text'],
             date=data['date'],
             location=data['location'],
             price=data['price'],
-            category=data['category'],
+            category=category_obj,
             thumbnail=data['thumbnail'],
         )
         new_article.save()

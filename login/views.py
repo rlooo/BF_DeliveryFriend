@@ -7,8 +7,6 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from .models import Information
-from .serializers import InformationSerializer
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
@@ -18,50 +16,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import Account
 
 from deliveryFriend.settings import KAKAO_KEY, SECRET_KEY
-
-# Create your views here.
-@csrf_exempt
-def information_list(request):
-    if request.method == 'GET':
-        query_set = Information.objects.all()
-        serializer = InformationSerializer(query_set, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method =='POST':
-        data = JSONParser().parse(request)
-        serializer = InformationSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-@csrf_exempt
-def information(request, pk):
-
-    obj = Information.objects.get(pk=pk)
-
-    if request.method == 'GET':
-        serializer = InformationSerializer(obj)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = InformationSerializer(obj, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
-        obj.delete()
-        return HttpResponse(status=204)
-
-@csrf_exempt
-def login(request):
-    if request.method == 'POST':
-        data = JSONParser().parse(request)
-        print(data)
-        return HttpResponse(status=201)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class KakaoSignInCallbackView(View): # 카카오톡 소셜로그인을 위한 클래스
@@ -113,6 +67,7 @@ class SignUpView(View):
             user_info.nickname = data['nickname']
             user_info.profile_image = data['image']
 
+            user_info.save()
             #if Account.objects.filter(nickname=user_info.nickname).exist():
                 #return JsonResponse({'message' : 'ALREADY_EXITSTS'}, status=400)
 
