@@ -1,3 +1,4 @@
+# chat/tests.py
 from channels.testing import ChannelsLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
@@ -23,10 +24,10 @@ class ChatTests(ChannelsLiveServerTestCase):
 
     def test_when_chat_message_posted_then_seen_by_everyone_in_same_room(self):
         try:
-            self._enter_chat_room('room_1')
+            self._enter_chat_room('royal-fog-8518')
 
             self._open_new_window()
-            self._enter_chat_room('room_1')
+            self._enter_chat_room('royal-fog-8518')
 
             self._switch_to_window(0)
             self._post_message('hello')
@@ -42,10 +43,10 @@ class ChatTests(ChannelsLiveServerTestCase):
 
     def test_when_chat_message_posted_then_not_seen_by_anyone_in_different_room(self):
         try:
-            self._enter_chat_room('room_1')
+            self._enter_chat_room('royal-fog-8518')
 
             self._open_new_window()
-            self._enter_chat_room('room_2')
+            self._enter_chat_room('rapid-mountain-6264')
 
             self._switch_to_window(0)
             self._post_message('hello')

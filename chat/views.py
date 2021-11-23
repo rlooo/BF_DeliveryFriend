@@ -22,9 +22,6 @@ from django.http import HttpResponse, JsonResponse
 #         'room_name': room_name
 #     })
 
-def about(request):
-    return render(request, "chat/about.html") # 수정
-
 class ProfileDetailView(View):
     def get(self, request, id):
         queryset = Account.objects.filter(social_login_id=id)
@@ -36,7 +33,8 @@ def new_room(request):
     new_room = None
     while not new_room:
         with transaction.atomic():
-            label = Haikunator.haikunate() # 랜덤으로 label 만듦
+            haikunator = Haikunator()
+            label = haikunator.haikunate() # 랜덤으로 label 만듦
             if Room.objects.filter(label=label).exists():
                 continue
             new_room=Room.objects.create(label=label) # 생성한 label 값으로 새로운 방을 만듦
@@ -51,4 +49,4 @@ def chat_room(request, label):
     # 가장 최근 50개의 메시지 보여줌
     messages = reversed(room.messages.order_by('-timestamp'[:50]))
 
-    return HttpResponse(room, status=200)
+    return HttpResponse(room, messages, status=200)
