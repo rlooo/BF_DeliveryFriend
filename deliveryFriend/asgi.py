@@ -14,7 +14,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 import chat.routing
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "deliveryFriend.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 
 application = ProtocolTypeRouter({
   "http": get_asgi_application(),
@@ -24,3 +24,6 @@ application = ProtocolTypeRouter({
         )
     ),
 })
+# # 핸들러 정의
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "deliveryFriend.settings") # 에러 생길 수도 있을듯
+# channel_layer = channels.asgi.get_channel_layer()
