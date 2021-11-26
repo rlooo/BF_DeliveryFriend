@@ -71,18 +71,14 @@ class SignUpView(View):
             #if Account.objects.filter(nickname=user_info.nickname).exist():
                 #return JsonResponse({'message' : 'ALREADY_EXITSTS'}, status=400)
 
-            # Account(
-            #     social_login_id=user_info.social_login_id,
-            #     email=user_info.email,
-            #     nickname=user_info.nickname,
-            #     profile_image=user_info.profile_image,
-            # ).save()
+            encoded_jwt = jwt.encode({'id': user_info.id}, SECRET_KEY, algorithm='HS256')  # jwt토큰 발행
 
             return JsonResponse({
                 'id': user_info.social_login_id,
                 'email': user_info.email,
                 'nickname':user_info.nickname,
                 'image':user_info.profile_image,
+                'token': encoded_jwt,
             }, status=201)
 
         except KeyError:
