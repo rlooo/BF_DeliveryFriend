@@ -53,7 +53,6 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             "hosts": [('127.0.0.1', 6379)],
         },
-        'ROUTING': "chat.routing.channel_routing", # 이거 뭐지?
     },
 }
 
@@ -83,7 +82,7 @@ ROOT_URLCONF = 'deliveryFriend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR,'templates'], # 수정
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,7 +133,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# 웹페이지에 사용할 정적파일의 최상위 url 경로
 STATIC_URL = '/static/'
+
+# 정적 파일이 위치한 경로들을 지정하는 설정 항목
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] #수정
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
