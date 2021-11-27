@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render
 from django.views import View
 
-from .models import Room
+from .models import Room,Message
 from .serializer import *
 
 from django.http import HttpResponse, JsonResponse
@@ -53,15 +53,28 @@ def index(request):
     return render(request, 'chat/index.html', {})
 
 def room(request, room_name):
-    if not Room.objects.filter(label=room_name).exists():
-        new_room=Room.objects.create(label=room_name) # 받은 room_name 값으로 새로운 방을 만듦
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+    if not Room.objects.filter(label=data['room_name']).exists():
+        new_room=Room.objects.create(label=data['room_name']) # 받은 room_name 값으로 새로운 방을 만듦
+        new_room.save()
 
     # 채팅방과 최근 메시지를 보여준다
     # label에 해당하는 채팅방이 없으면 자동으로 생성한다.
-    room, created = Room.objects.get_or_create(label=room_name)
+    room, created = Room.objects.get_or_create(label=data['room_name'])
     # 가장 최근 50개의 메시지 보여줌
     messages = reversed(room.messages.order_by('-timestamp'[:50]))
 
-    return render(request, 'chat/room.html', {
-        'room_name': room_name
-    })
+    # # 메시지 저장 부분
+    # if request.method == 'POST':
+    #     data = json.loads(request.body)
+    #
+    # new_message = Message.objects.create(
+    #     room=room,
+    #     handle=data['handle'],
+    #     message=data['message'],
+    # )
+    # new_message.save()
+
+    return HttpResponse(status=200)
