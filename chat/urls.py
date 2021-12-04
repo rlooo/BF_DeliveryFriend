@@ -9,4 +9,5 @@ urlpatterns = [
     #url(r'^$', views.about, name='about'), # 수정
     #url(r'^new/$', views.new_room, name='new_room'), # 수정
     path('<str:room_name>/', views.room),
+    path('new_room/', views.new_room),
 ]

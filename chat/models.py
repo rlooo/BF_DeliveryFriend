@@ -11,19 +11,20 @@ class Room(models.Model):
     def __unicode__(self):
         return self.label
 
-
 class Message(models.Model):
     room = models.ForeignKey(Room, related_name='messages', on_delete=models.SET_NULL, null=True)
-    handle = models.TextField()
-    message = models.TextField()
+    senderId = models.TextField(null=True)
+    receiverId = models.TextField(null=True)
+    message = models.TextField(null=True)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
 
     def __unicode__(self):
-        return '[{timestamp}] {handle}: {message}'.format(**self.as_dict())
+        return '[{timestamp}] {senderId} {receiverId}: {message}'.format(**self.as_dict())
 
     @property
     def formatted_timestamp(self):
         return self.timestamp.strftime('%b %-d %-I:%M %p')
 
     def as_dict(self):
-        return {'handle': self.handle, 'message': self.message, 'timestamp': self.formatted_timestamp}
+        return {'senderId': self.senderId, 'receiverId': self.receiverId, 'message': self.message, 'timestamp': self.formatted_timestamp}
+
