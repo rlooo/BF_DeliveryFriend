@@ -1,17 +1,23 @@
 import json
+from datetime import datetime
+from json import JSONEncoder
 
+from django.core.serializers.json import DjangoJSONEncoder
 from haikunator import Haikunator
 from django.db import transaction
-from django.shortcuts import render, redirect
+from rest_framework import generics
 
 # Create your views here.
 from django.shortcuts import render
 from django.views import View
 
-from .models import Room,Message
+from . import models
+from .models import Room, Message
 from .serializer import *
 
 from django.http import HttpResponse, JsonResponse
+
+from django.forms.models import model_to_dict
 
 class ProfileDetailView(View):
     def get(self, request, id):
@@ -33,29 +39,16 @@ def new_room(request):
             new_room.save()
 
     data = json.loads(request.body)
-    if Account.objects.filter(social_login_id=data['author']).exists():
-        author_info = Account.objects.get(social_login_id=data['author'])
+    if Account.objects.filter(pk=data['author']).exists():
+        author_info = Account.objects.get(pk=data['author'])
+    social_login_id = author_info.social_login_id
+    nickname = author_info.nickname
+    profile_image = author_info.profile_image
+    return JsonResponse({'label':label,
+                         'social_login_id':social_login_id,
+                         'nickname':nickname,
+                         'profile_image':profile_image}, status=200)
 
-    return JsonResponse({'label':label, 'author_info':author_info}, status=200)
-#
-# 실제 채팅이 이루어짐
-# def chat_room(request, room_name):
-#     # 채팅방과 최근 메시지를 보여준다
-#
-#     # label에 해당하는 채팅방이 없으면 자동으로 생성한다.
-#     room, created = Room.objects.get_or_create(label=room_name)
-#     # 가장 최근 50개의 메시지 보여줌
-#     messages = reversed(room.messages.order_by('-timestamp'[:50]))
-#
-#     return render(request, "chat/room.html", {
-#         'room_name':room_name,
-#         'room': room,
-#         'messages': messages,
-#     })
-#     # return HttpResponse(room, messages, status=200)
-
-def index(request):
-    return render(request, 'chat/index.html', {})
 
 def room(request, room_name):
     if request.method == 'POST':
@@ -67,8 +60,14 @@ def room(request, room_name):
 
     # 채팅방과 최근 메시지를 보여준다
     # label에 해당하는 채팅방이 없으면 자동으로 생성한다.
-    room, created = Room.objects.get_or_create(label=['room_name'])
-    # 가장 최근 50개의 메시지 보여줌
-    messages = reversed(room.messages.order_by('-timestamp'[:50]))
+    room, created = Room.objects.get_or_create(label=data['room_name'])
 
-    return JsonResponse({'messages' :messages}, status=200)
+    last_ten = Message.objects.filter(room=room.pk).order_by('-timestamp')[:10]
+
+    print(last_ten[0].message)
+    print(last_ten[1].message)
+    last_ten_in_ascending_order = reversed(last_ten)
+    return HttpResponse(last_ten_in_ascending_order, status=200)
+
+
+

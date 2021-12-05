@@ -85,5 +85,3 @@ class CategorySearchViewSet(View):
         queryset = Board.objects.filter(category__id=id)
         serializer = BoardListSerializer(queryset, many=True)
         return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
-
-
