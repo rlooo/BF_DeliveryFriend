@@ -11,6 +11,7 @@ from rest_framework import generics
 from django.shortcuts import render
 from django.views import View
 
+from user.models import User
 from . import models
 from .models import Room, Message
 from .serializer import *
@@ -18,13 +19,6 @@ from .serializer import *
 from django.http import HttpResponse, JsonResponse
 
 from django.forms.models import model_to_dict
-
-class ProfileDetailView(View):
-    def get(self, request, id):
-        queryset = Account.objects.filter(social_login_id=id)
-        serializer = AccountSerializer(queryset, many=True)
-        return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
-
 
 # 랜덤으로 방 이름을 만듦
 def new_room(request):
@@ -39,8 +33,8 @@ def new_room(request):
             new_room.save()
 
     data = json.loads(request.body)
-    if Account.objects.filter(pk=data['author']).exists():
-        author_info = Account.objects.get(pk=data['author'])
+    if User.objects.filter(pk=data['author']).exists():
+        author_info = User.objects.get(pk=data['author'])
     social_login_id = author_info.social_login_id
     nickname = author_info.nickname
     profile_image = author_info.profile_image
@@ -50,7 +44,7 @@ def new_room(request):
                          'profile_image':profile_image}, status=200)
 
 
-def room(request, room_name):
+def room(request, room_name, json_util=None):
     if request.method == 'POST':
         data = json.loads(request.body)
 
@@ -66,8 +60,22 @@ def room(request, room_name):
 
     print(last_ten[0].message)
     print(last_ten[1].message)
-    last_ten_in_ascending_order = reversed(last_ten)
-    return HttpResponse(last_ten_in_ascending_order, status=200)
+
+    senderIds = []
+    receiverIds = []
+    messages = []
+
+    for i in last_ten:
+        senderIds.append(i.senderId)
+        receiverIds.append(i.receiverId)
+        messages.append(i.message)
+
+    last_ten_2 = [{"senderId": senderId, "receiverId": receiverId, "message":message} for senderId, receiverId, message in zip(senderIds, receiverIds, messages)]
+    print(last_ten_2)
+
+    # last_ten_in_ascending_order = reversed(last_ten)
+    return HttpResponse(json.dumps(last_ten_2,indent=4, sort_keys=True, default=str), status=200)
+    # return HttpResponse(last_ten_in_ascending_order, status=200)
 
 
 

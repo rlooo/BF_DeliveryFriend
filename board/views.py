@@ -1,11 +1,17 @@
 import json
 
-from rest_framework import generics
+from django.views.generic import FormView
 from django.views import View
+from rest_framework.generics import ListAPIView
 
-from login.models import Account
-from .serializer import *
+from board.models import Board, Category
+from board.serializer import BoardListSerializer, CategorySerializer
+from user import serializers
+from user.models import User
 from django.http import HttpResponse
+
+from django.db.models import Q
+from django.shortcuts import render
 
 # # board.html 페이지를 부르는 index 함수
 # def index(request):
@@ -30,9 +36,8 @@ def new_post(request):
     if request.method == 'POST':
         data = json.loads(request.body)
 
-        if Account.objects.filter(social_login_id=data['author']).exists():
-            user = Account.objects.get(social_login_id=data['author'])
-        print(user)
+        if User.objects.filter(social_login_id=data['author']).exists():
+            user = User.objects.get(social_login_id=data['author'])
 
         if Category.objects.filter(id=data['category']).exists():
             category_obj = Category.objects.get(id=data['category'])
@@ -50,8 +55,8 @@ def new_post(request):
         new_article.save()
         return HttpResponse(status=200)
 
-# 모든 게시글들을 불러오는 함수
-class BoardListView(generics.ListAPIView):
+# 모든 게시글들을 불러오기
+class BoardListView(ListAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardListSerializer
 
@@ -67,8 +72,8 @@ class BoardListView(generics.ListAPIView):
 
         return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
 
-#카테고리 리스트를 불러오는 함수
-class CategoryViewSet(generics.ListAPIView):
+# 카테고리 리스트를 불러오기
+class CategoryViewSet(ListAPIView):
     queryset = Category.objects.all()  # 카테고리 모델을 모두 부른다.
     serializer_class = CategorySerializer
 
@@ -79,9 +84,24 @@ class CategoryViewSet(generics.ListAPIView):
 
         return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
 
-# 카테고리 별 게시글 불러오는 함수
+# 카테고리 별 게시글 불러오기
 class CategorySearchViewSet(View):
     def get(self, request, id):
         queryset = Board.objects.filter(category__id=id)
         serializer = BoardListSerializer(queryset, many=True)
         return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
+
+# 검색 기능
+class SearchView(View):
+    def get(self, request):
+        data = json.loads(request.body)
+        search_word = data['search_word']
+        post_list = list(Board.objects.filter(Q(title__icontains=search_word) | Q(text__icontains=search_word)).distinct().values())
+
+        return HttpResponse(json.dumps(post_list, indent=4, sort_keys=True, default=str), content_type = "application/json", status=200)
+
+
+
+
+
+

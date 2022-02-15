@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from login.models import Account
+from user.models import User
 
-class AccountSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Account
+        model = User
         fields = ('social_login_id', 'nickname', 'profile_image')

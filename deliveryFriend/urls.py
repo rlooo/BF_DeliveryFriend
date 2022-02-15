@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from login.views import KakaoSignInCallbackView, SignUpView
+from user.views import KakaoSignInCallbackView, SignUpView
 from board.views import *
 
 # 이미지 업로드
@@ -25,18 +25,12 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    #path('information/', views.information_list), # 기본 로그인 연습
-    #path('information/<int:pk>/', views.information), # 기본 로그인 연습
-    #path('auth/login/', views.login), # 기본 로그인 연습
-    path('auth/kakao/login/', KakaoSignInCallbackView.as_view()),
+    path('auth/kakao/user/', KakaoSignInCallbackView.as_view()),
     path('signup/', SignUpView.as_view()),
-    path('board/list/', BoardListView.as_view()),
-    #path('',index),
     #path('board/<int:pk>', posting, name="posting"),
-    path('board/new_post/', new_post),
     path('chat/', include('chat.urls')),
-    path('category/', CategoryViewSet.as_view()),
-    path('category/<int:id>/',  CategorySearchViewSet.as_view()),
+    path('board/', include('board.urls')),
+
 ]
 
 # 이미지 URL 설정
