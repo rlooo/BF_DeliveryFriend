@@ -115,7 +115,7 @@ class PostDeleteView(DeleteView):
 class NearInfoView(View):
     def get(self, request):
             # 쿼리로 위치 정보를 받아 position이라는 변수에 저장한다.
-            longitude = float(request.GET.get('logitude', None))
+            longitude = float(request.GET.get('longitude', None))
             latitude = float(request.GET.get('latitude', None))
             position = (latitude, longitude)
 
