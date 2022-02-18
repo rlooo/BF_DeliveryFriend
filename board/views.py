@@ -1,13 +1,14 @@
 import json
 
-from django.views.generic import FormView
+from django.views.generic import FormView, DeleteView
 from django.views import View
-from rest_framework.generics import ListAPIView
+from haversine import haversine
+from rest_framework.generics import ListAPIView, get_object_or_404
 
 from board.models import Board, Category
 from board.serializer import BoardListSerializer, CategorySerializer
 from user import serializers
-from user.models import User
+from user.models import Account
 from django.http import HttpResponse
 
 from django.db.models import Q
@@ -36,8 +37,8 @@ def new_post(request):
     if request.method == 'POST':
         data = json.loads(request.body)
 
-        if User.objects.filter(social_login_id=data['author']).exists():
-            user = User.objects.get(social_login_id=data['author'])
+        if Account.objects.filter(social_login_id=data['author']).exists():
+            user = Account.objects.get(social_login_id=data['author'])
 
         if Category.objects.filter(id=data['category']).exists():
             category_obj = Category.objects.get(id=data['category'])
@@ -100,8 +101,40 @@ class SearchView(View):
 
         return HttpResponse(json.dumps(post_list, indent=4, sort_keys=True, default=str), content_type = "application/json", status=200)
 
+# 게시글 삭제 기능
+class PostDeleteView(DeleteView):
+    model = Board
 
+    def dispatch(self, request, *args, **kwargs):
+        object = self.get_object()
+        if object.author != request.user:
+            return HttpResponse(status=404)
+        else:
+            return super(PostDeleteView, self).dispatch(request, *args, **kwargs)
 
+class NearInfoView(View):
+    def get(self, request):
+            # 쿼리로 위치 정보를 받아 position이라는 변수에 저장한다.
+            longitude = float(request.GET.get('logitude', None))
+            latitude = float(request.GET.get('latitude', None))
+            position = (latitude, longitude)
+
+            # 반경 2km를 기준으로 정보를 불러올 것이므로 사방 1km 씩 자름 (사전 필터링으로 쿼리 속도 줄임)
+            condition = (
+                    Q(latitude__range=(latitude - 0.01, latitude + 0.01)) |
+                    Q(longitude__range=(longitude - 0.015, longitude + 0.015))
+            )
+            # 필터를 게시물에 적용
+            post_infos = (
+                Board
+                .objects
+                .filter(condition)
+            )
+            # 필터된 객체와 특정 위치와의 거리가 2km 이내인 객체를 모아서 반환
+            near_post_infos = [info for info in post_infos
+                                    if haversine(position, (info.latitude, info.longitude)) <= 2]
+
+            return HttpResponse(json.dumps(near_post_infos, indent=4, sort_keys=True, default=str), content_type = "application/json", status=200)
 
 
 

@@ -21,12 +21,15 @@ urlpatterns = [
     # Example: /board/1/update/
     #path('<int:pk>/update/', views.PostUpdateView.as_view(), name='update'),
 
-    # Example: /board/1/delete/
-    #path('<int:pk>/delete/', views.PostDeleteView.as_view(), name='delete'),
+    # Example: /board/delete/1
+    path('delete/<int:pk>/', views.PostDeleteView.as_view(), name='delete'),
 
     # Example: /board/category
     path('category/', CategoryViewSet.as_view()),
 
     # Example: /board/category/1
     path('category/<int:id>/', CategorySearchViewSet.as_view()),
+
+    # Example: /board/near/list
+    path('near/list/', NearInfoView.as_view()),
 ]

@@ -11,7 +11,7 @@ from rest_framework import generics
 from django.shortcuts import render
 from django.views import View
 
-from user.models import User
+from user.models import Account
 from . import models
 from .models import Room, Message
 from .serializer import *
@@ -33,8 +33,8 @@ def new_room(request):
             new_room.save()
 
     data = json.loads(request.body)
-    if User.objects.filter(pk=data['author']).exists():
-        author_info = User.objects.get(pk=data['author'])
+    if Account.objects.filter(pk=data['author']).exists():
+        author_info = Account.objects.get(pk=data['author'])
     social_login_id = author_info.social_login_id
     nickname = author_info.nickname
     profile_image = author_info.profile_image

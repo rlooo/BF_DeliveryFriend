@@ -1,0 +1,11 @@
+haversine-2.5.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+haversine-2.5.1.dist-info/LICENSE,sha256=SltlfOD2RzrOFcKSzX8NSDtO7x_Y8xyKTVjHqMJ-sg8,1073
+haversine-2.5.1.dist-info/METADATA,sha256=eloWpqvDGZrTiFmz8PPkIYZ2Rixp_tNYKKHW52WSCjA,4721
+haversine-2.5.1.dist-info/RECORD,,
+haversine-2.5.1.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+haversine-2.5.1.dist-info/WHEEL,sha256=WzZ8cwjh8l0jtULNjYq1Hpr-WCqCRgPr--TX4P5I1Wo,110
+haversine-2.5.1.dist-info/top_level.txt,sha256=n8b--6dbGvD--a3lJH1Nb2m_i0c3ldR63yWfnyGpaSs,10
+haversine/__init__.py,sha256=-tcpIz6fW9LUhnhGAMq38mmDUwONRrZN7yqEA7VZofU,87
+haversine/__pycache__/__init__.cpython-39.pyc,,
+haversine/__pycache__/haversine.cpython-39.pyc,,
+haversine/haversine.py,sha256=FgWd9we6CPXOh45OJTZ-iln9BTIebZZnRzm5RN2wC88,5961

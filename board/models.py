@@ -1,4 +1,4 @@
-from user.models import User
+from user.models import Account
 from django.db import models
 from django.utils import timezone
 # Create your models here.
@@ -12,12 +12,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+# class Location(models.Model):
+#     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+#     latitude = models.DecimalField(max_digits=9, decimal_places=6)
+#
+#     class Meta:
+#         db_table = 'location'
+
 class Board(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=200)
     text = models.TextField()
     date = models.DateTimeField()
-    location = models.CharField(max_length=50)
+    longitude = models.DecimalField(max_digits=17, decimal_places=14)
+    latitude = models.DecimalField(max_digits=16, decimal_places=14)
     price = models.IntegerField()
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
     thumbnail = models.ImageField(u'썸네일',
@@ -31,6 +39,7 @@ class Board(models.Model):
         Board.objects.filter(date__lte=timezone.now())\
                     .order_by('created_at')
         return self.title
+
 
 
 
