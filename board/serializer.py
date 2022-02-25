@@ -12,4 +12,4 @@ class BoardListSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=False, read_only=True)
     class Meta:
         model = Board
-        fields = ('id', 'author', 'title', 'text', 'date', 'location', 'price', 'category', 'thumbnail', 'created_date')
+        fields = ('id', 'author', 'title', 'text', 'date', 'longitude', 'latitude', 'price', 'category', 'thumbnail', 'created_at')

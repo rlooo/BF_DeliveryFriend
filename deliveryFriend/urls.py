@@ -24,9 +24,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    #path('auth/kakao/user/', KakaoSignInCallbackView.as_view()),
-    #path('signup/', SignUpView.as_view()),
-    #path('board/<int:pk>', posting, name="posting"),
     path('user/', include('user.urls')),
     path('chat/', include('chat.urls')),
     path('board/', include('board.urls')),
