@@ -1,1 +1,1 @@
-web: gunicorn deliveryFriend.wsgi --log-file -
+web: gunicorn locallibrary.wsgi --log-file -
