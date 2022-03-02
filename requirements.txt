@@ -60,7 +60,6 @@ sqlparse==0.4.2
 trio==0.19.0
 trio-websocket==0.9.2
 Twisted==21.7.0
-twisted-iocpsupport==1.0.2
 txaio==21.2.1
 typing-extensions==3.10.0.2
 urllib3==1.26.7
