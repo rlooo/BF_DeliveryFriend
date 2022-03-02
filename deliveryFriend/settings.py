@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
 #import my_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,9 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+#DEBUG = True
+DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -67,13 +67,11 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     #'corsheaders.middleware.CorsMiddleware',
 ]
 CORS_ORIGIN_WHITELIST = [
@@ -152,8 +150,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #DATABASES = my_settings.DATABASES
 
 KAKAO_KEY = '6e0df93d05b69544e1a2f5a10c7b0dcb'
-SECRET_KEY = 'django-insecure-8bh*d6qe(nz%s5fpw#p)179e(m_qp#ox_@ml9gjgjh7rs2ntbg'
-
+#SECRET_KEY = 'django-insecure-8bh*d6qe(nz%s5fpw#p)179e(m_qp#ox_@ml9gjgjh7rs2ntbg'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-8bh*d6qe(nz%s5fpw#p)179e(m_qp#ox_@ml9gjgjh7rs2ntbg')
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -169,10 +167,3 @@ DATABASES = {
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-# Activate Django-Heroku.
-django_heroku.settings(locals())
-
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
