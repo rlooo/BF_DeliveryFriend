@@ -173,6 +173,16 @@ DATABASES = {
         }
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'delivery_friend_DB',   # The Server name from 1.5
+#         'USER': 'postgres', # The username from 1.6
+#         'PASSWORD': 'wldnro2416', # The password from installation
+#         'HOST': 'localhost', # Host name/address from 1.6,
+#         'PORT': '5432' # Port from 1.6
+#     }
+# }
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
