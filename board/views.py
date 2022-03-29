@@ -156,13 +156,15 @@ class SearchView(View):
 
         return HttpResponse(json.dumps(serializer.data, ensure_ascii=False, indent='\t'), status=200)
 
-# 내 동네와 가까운 게시물 리스트 불러오기
+
+# 내 동네와 가까운 게시물 리스트 불러오기(카테고리별)
 class NearInfoListView(View):
     def get(self, request):
         data = json.loads(request.body)
         # 쿼리로 위치 정보를 받아 position이라는 변수에 저장한다.
         longitude = float(data['longitude'])
         latitude = float(data['latitude'])
+        category_id = data['category_id']
         position = (latitude, longitude)
 
         # 반경 2km를 기준으로 정보를 불러올 것이므로 사방 1km 씩 자름 (사전 필터링으로 쿼리 속도 줄임)
@@ -175,6 +177,7 @@ class NearInfoListView(View):
             Board
                 .objects
                 .filter(condition)
+                .filter(category__id=category_id)
         )
         # 필터된 객체와 특정 위치와의 거리가 2km 이내인 객체를 모아서 반환
         near_post_infos = [info for info in post_infos
