@@ -22,8 +22,7 @@ class Account(models.Model):
 # class Address(models.Model):
 #     user = models.ForeignKey('Account', related_name='address', on_delete=models.CASCADE, )
 #     code = models.IntegerField()
-#     longitude = models.DecimalField(max_digits=9, decimal_places=6)
-#     latitude = models.DecimalField(max_digits=9, decimal_places=6)
+#     c
 #     created_at = models.DateTimeField(auto_now_add=True)
 #     deleted_at = models.DateTimeField(null=True)
 #

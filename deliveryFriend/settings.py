@@ -159,7 +159,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #DATABASES = my_settings.DATABASES
 
 KAKAO_KEY = '6e0df93d05b69544e1a2f5a10c7b0dcb'
-#SECRET_KEY = 'django-insecure-8bh*d6qe(nz%s5fpw#p)179e(m_qp#ox_@ml9gjgjh7rs2ntbg'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-8bh*d6qe(nz%s5fpw#p)179e(m_qp#ox_@ml9gjgjh7rs2ntbg')
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

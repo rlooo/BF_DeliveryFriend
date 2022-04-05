@@ -80,3 +80,25 @@ class SignUpView(View):
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
+# class SetLocation(View):
+#     def post(self, request):
+#         try:
+#             data = json.loads(request.body)
+#
+#             if Account.objects.filter(social_login_id=data['id']).exists():
+#                 user_info = Account.objects.get(social_login_id=data['id'])
+#
+#         user_info.longitude = data['longitude']
+#         user_info.latitude = data['latitude']
+#
+#         user_info.save()
+
+# 유저 삭제 기능
+def user_delete(request):
+    data = json.loads(request.body)
+    user = Account.objects.get(email= data['email'])
+    user.delete()
+    return HttpResponse(status=200)
+    # else:
+    #     return JsonResponse({'MESSAGE': 'INVALID_USER'}, status=401)

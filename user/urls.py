@@ -9,4 +9,7 @@ urlpatterns = [
 
     # Example: /user/signup/
     path('signup/', SignUpView.as_view(), name='signup'),
+
+    # Example: /user/delete/
+    path('delete/', user_delete, name='user_delete'),
 ]
