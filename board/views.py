@@ -161,9 +161,15 @@ class SearchView(View):
 class NearInfoListView(View):
     def get(self, request):
         data = json.loads(request.body)
+
         # 쿼리로 위치 정보를 받아 position이라는 변수에 저장한다.
-        longitude = float(data['longitude'])
-        latitude = float(data['latitude'])
+        if Account.objects.filter(social_login_id=data['id']).exists():
+            user_info = Account.objects.get(social_login_id=data['id'])
+
+        longitude = float(user_info.longitude)
+        latitude = float(user_info.latitude)
+        # longitude = float(data['longitude'])
+        # latitude = float(data['latitude'])
         category_id = data['category_id']
         position = (latitude, longitude)
 

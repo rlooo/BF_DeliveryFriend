@@ -12,4 +12,7 @@ urlpatterns = [
 
     # Example: /user/delete/
     path('delete/', user_delete, name='user_delete'),
+
+    # Example: /user/location/
+    path('location/', set_location, name='set_location'),
 ]

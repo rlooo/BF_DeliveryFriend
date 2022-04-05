@@ -9,6 +9,8 @@ class Account(models.Model):
     nickname = models.CharField(max_length=20, unique=True)
     profile_image = models.CharField(max_length=2000, null=True, blank=True,
                                      default='https://png.pngtree.com/element_our/20200610/ourlarge/pngtree-character-default-avatar-image_2237203.jpg')
+    longitude = models.DecimalField(max_digits=25, decimal_places=20, null=True, blank=True) # 경도
+    latitude = models.DecimalField(max_digits=25, decimal_places=20, null=True,  blank=True) # 위도
     created_at = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
@@ -22,7 +24,7 @@ class Account(models.Model):
 # class Address(models.Model):
 #     user = models.ForeignKey('Account', related_name='address', on_delete=models.CASCADE, )
 #     code = models.IntegerField()
-#     c
+#
 #     created_at = models.DateTimeField(auto_now_add=True)
 #     deleted_at = models.DateTimeField(null=True)
 #
