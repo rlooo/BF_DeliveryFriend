@@ -7,7 +7,6 @@ from rest_framework.generics import ListAPIView, get_object_or_404
 
 from board.models import Board, Category
 from board.serializer import BoardListSerializer, CategorySerializer
-from user.decorators import id_auth
 from user.models import Account
 from django.http import HttpResponse, JsonResponse
 
